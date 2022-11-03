@@ -5,8 +5,7 @@ import io.micronaut.data.annotation.*;
 import io.micronaut.data.model.DataType;
 import lombok.*;
 
-import java.time.Instant;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -14,6 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//@Where("@.enabled = true")
 public class Question {
 
     @Id
@@ -32,12 +32,21 @@ public class Question {
     private QuestionType type;
 
     @ToString.Exclude
-    @MappedProperty(value = "answers")
+    @MappedProperty(value = "choice_answers")
     @TypeDef(type = DataType.JSON)
-    private List<Answer> answers = new ArrayList<>();
+    private List<ChoiceAnswer> choiceAnswers;
+
+    @ToString.Exclude
+    @MappedProperty(value = "code_answer")
+    @TypeDef(type = DataType.JSON)
+    private CodeAnswer codeAnswer;
 
     @DateCreated
     @MappedProperty(value = "creation_date")
     @ToString.Exclude
-    private Instant creationDate;
+    private ZonedDateTime creationDate;
+
+    @ToString.Exclude
+    @MappedProperty(value = "enabled")
+    private boolean enabled;
 }

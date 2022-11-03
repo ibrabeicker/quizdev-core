@@ -5,15 +5,9 @@ import br.com.pensarcomodev.service.impl.QuestionServiceImpl;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-
-import static io.micronaut.http.HttpResponse.ok;
 
 @Slf4j
 @Controller("/question")
@@ -36,8 +30,12 @@ public class QuestionController {
     }
 
     @Post
-    public HttpResponse<Question> save(@Body Question question) {
-        questionService.save(question);
-        return ok(question);
+    public Question saveNew(@Body Question question) {
+        return questionService.saveNew(question);
+    }
+
+    @Patch
+    public Question update(@Body Question question) {
+        return questionService.update(question);
     }
 }

@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Answer {
+public class CodeAnswer {
 
-    private String text;
-
-    private String explanation;
-
-    private boolean right;
+    private String code;
 }

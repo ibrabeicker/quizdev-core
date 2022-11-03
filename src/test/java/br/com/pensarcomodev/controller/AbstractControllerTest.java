@@ -30,6 +30,11 @@ public class AbstractControllerTest {
         return client.toBlocking().retrieve(request, type);
     }
 
+    public <B, R> R patch(String uri, B body, Class<R> type) {
+        HttpRequest<B> request = HttpRequest.PATCH(uri, body);
+        return client.toBlocking().retrieve(request, type);
+    }
+
     public <T> Page<T> getWithPage(String uri, ParamMap parameters, Class<T> type) {
         MutableHttpRequest<T> request = HttpRequest.<T>GET(uri);
         parameters.getMap().forEach((k, v) -> request.getParameters().add(k, v.toString()));

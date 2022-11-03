@@ -1,6 +1,7 @@
 package br.com.pensarcomodev.service.impl;
 
 import br.com.pensarcomodev.entity.Question;
+import br.com.pensarcomodev.exception.IdNotFoundException;
 import br.com.pensarcomodev.repository.QuestionRepository;
 import br.com.pensarcomodev.service.QuestionService;
 import io.micronaut.data.model.Page;
@@ -19,8 +20,20 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void save(Question question) {
-        questionRepository.save(question);
+    public Question saveNew(Question question) {
+        question.setEnabled(true);
+        return questionRepository.save(question);
+    }
+
+    @Override
+    public Question update(Question question) {
+        Question questionDb = questionRepository.findById(question.getId()).orElseThrow();
+        questionDb.setChoiceAnswers(question.getChoiceAnswers());
+        questionDb.setCodeAnswer(question.getCodeAnswer());
+        questionDb.setEnabled(question.isEnabled());
+        questionDb.setText(question.getText());
+        questionDb.setType(question.getType());
+        return questionRepository.update(questionDb);
     }
 
     @Override
@@ -28,6 +41,6 @@ public class QuestionServiceImpl implements QuestionService {
         if (!page.isSorted()) {
             page = page.order(Sort.Order.asc("id"));
         }
-        return questionRepository.findAll(page);
+        return questionRepository.findByEnabled(true, page);
     }
 }

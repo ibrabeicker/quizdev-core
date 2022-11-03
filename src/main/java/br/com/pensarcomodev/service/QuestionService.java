@@ -8,7 +8,9 @@ public interface QuestionService {
 
     Question findby(Long id);
 
-    void save(Question question);
+    Question saveNew(Question question);
+
+    Question update(Question question);
 
     Page<Question> findAll(Pageable page);
 }
