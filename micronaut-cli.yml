@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: br.com.pensarcomodev
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, assertj, aws-lambda, data, data-jdbc, flyway, graalvm, gradle, jackson-databind, java, java-application, jdbc-hikari, junit, logback, lombok, micronaut-build, mockito, openapi, postgres, readme, shade, test-resources, yaml]

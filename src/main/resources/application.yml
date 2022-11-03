@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: quizdevCore
+  data:
+    pageable:
+      default-page-size: 10
+datasources:
+  default:
+#    url: 'jdbc:postgresql://localhost:5432/quizdev_db'
+    #database: quizdev_db
+#    username: quizdev_usr
+#    password: quizdev_usr
+#    driverClassName: org.postgresql.Driver
+    db-type: postgres
+#    schema-generate: CREATE_DROP
+    dialect: POSTGRES
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations:
+        - classpath:migrations
+#test-resources:
+#  containers:
+#    postgres:
+#      image-name: postgres:14
