@@ -1,16 +1,16 @@
 package br.com.pensarcomodev.service;
 
-import br.com.pensarcomodev.entity.Question;
+import br.com.pensarcomodev.dto.QuestionDto;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 
 public interface QuestionService {
 
-    Question findby(Long id);
+    QuestionDto findby(Long id);
 
-    Question saveNew(Question question);
+    QuestionDto saveNew(QuestionDto questionDto);
 
-    Question update(Question question);
+    QuestionDto update(QuestionDto question);
 
-    Page<Question> findAll(Pageable page);
+    Page<QuestionDto> findAll(Pageable page);
 }

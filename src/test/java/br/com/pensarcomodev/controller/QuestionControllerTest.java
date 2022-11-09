@@ -109,6 +109,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
         // O resto das propriedades é sobrescrita
         assertEquals("Novo texto", response.getText());
         assertEquals("Nova resposta 2", response.getChoiceAnswers().get(0).getText());
+        assertEquals(2, response.getChoiceAnswers().size());
         assertEquals("Alternative 2", response.getChoiceAnswers().get(1).getText());
     }
 

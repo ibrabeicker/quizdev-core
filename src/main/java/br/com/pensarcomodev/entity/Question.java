@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Where("@.enabled = true")
 public class Question {
 
     @Id
@@ -49,4 +48,8 @@ public class Question {
     @ToString.Exclude
     @MappedProperty(value = "enabled")
     private boolean enabled;
+
+    @MappedProperty(value = "metadata")
+    @TypeDef(type = DataType.JSON)
+    private QuestionMetadata metadata;
 }

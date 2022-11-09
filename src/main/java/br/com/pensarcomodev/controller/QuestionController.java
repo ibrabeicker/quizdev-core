@@ -1,41 +1,37 @@
 package br.com.pensarcomodev.controller;
 
-import br.com.pensarcomodev.entity.Question;
+import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.service.impl.QuestionServiceImpl;
-import io.micronaut.context.ApplicationContext;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.*;
-import jakarta.inject.Inject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller("/question")
+@RequiredArgsConstructor
 public class QuestionController {
 
-    @Inject
-    private QuestionServiceImpl questionService;
+    private final QuestionServiceImpl questionService;
 
     @Get("/{id}")
-    public Question findById(Long id) {
+    public QuestionDto findById(Long id) {
         return questionService.findby(id);
     }
 
-    @Inject
-    ApplicationContext applicationContext;
-
     @Get
-    public Page<Question> listQuestions(Pageable page) {
+    public Page<QuestionDto> listQuestions(Pageable page) {
         return questionService.findAll(page);
     }
 
     @Post
-    public Question saveNew(@Body Question question) {
-        return questionService.saveNew(question);
+    public QuestionDto saveNew(@Body QuestionDto questionDto) {
+        return questionService.saveNew(questionDto);
     }
 
     @Patch
-    public Question update(@Body Question question) {
-        return questionService.update(question);
+    public QuestionDto update(@Body QuestionDto questionDto) {
+        return questionService.update(questionDto);
     }
 }
