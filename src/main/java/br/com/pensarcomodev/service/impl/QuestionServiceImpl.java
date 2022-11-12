@@ -2,7 +2,6 @@ package br.com.pensarcomodev.service.impl;
 
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.Question;
-import br.com.pensarcomodev.entity.QuestionMetadata;
 import br.com.pensarcomodev.mapper.QuestionMapper;
 import br.com.pensarcomodev.repository.QuestionRepository;
 import br.com.pensarcomodev.service.QuestionService;
@@ -13,9 +12,8 @@ import io.micronaut.data.model.Sort;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Singleton
@@ -28,13 +26,16 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDto findby(Long id) {
-        return toDto(questionRepository.findById(id).orElseThrow());
+        Question question = questionRepository.findById(id).orElseThrow();
+        question.setTags(questionRepository.findTagsByIdEqual(question.getId()));
+        return toDto(question);
     }
 
     @Override
     public QuestionDto saveNew(QuestionDto questionDto) {
         Question question = fromDto(questionDto);
         question.setEnabled(true);
+        questionTagService.createNewTags(question.getTags());
         question = questionRepository.save(question);
         return toDto(question);
     }
@@ -48,7 +49,8 @@ public class QuestionServiceImpl implements QuestionService {
         questionDb.setEnabled(question.isEnabled());
         questionDb.setText(question.getText());
         questionDb.setType(question.getType());
-        questionDb.setMetadata(question.getMetadata());
+        questionDb.setTags(question.getTags());
+        questionTagService.createNewTags(question.getTags());
         questionDb = questionRepository.update(questionDb);
         return toDto(questionDb);
     }
@@ -62,45 +64,20 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private QuestionDto toDto(Question question) {
-        QuestionDto dto = questionMapper.toDto(question);
-        dto.setTags(buildTagsString(question.getMetadata().getTags()));
-        return dto;
-    }
-
-    private QuestionDto toDto(Question question, Map<Integer, String> idsToName) {
-        QuestionDto dto = questionMapper.toDto(question);
-        dto.setTags(buildTagsString(question.getMetadata().getTags(), idsToName));
-        return dto;
+        return questionMapper.toDto(question);
     }
 
     private Question fromDto(QuestionDto dto) {
         Question question = questionMapper.fromDto(dto);
-        question.setMetadata(buildMetadata(dto));
+        question.setTags(new HashSet<>(questionTagService.fromNames(dto.getTags())));
         return question;
     }
 
-    private QuestionMetadata buildMetadata(QuestionDto questionDto) {
-        QuestionMetadata questionMetadata = new QuestionMetadata();
-        List<String> tags = Arrays.asList(questionDto.getTags().split(" "));
-        questionMetadata.setTags(questionTagService.findIdsByNames(tags));
-        return questionMetadata;
-    }
-
-    private String buildTagsString(List<Integer> tagsIds, Map<Integer, String> idsToName) {
-        return tagsIds.stream().map(idsToName::get).sorted()
-                .collect(Collectors.joining(" "));
-    }
-
-    private String buildTagsString(List<Integer> tagsIds) {
-        List<String> tagsNames = questionTagService.findNamesByIds(tagsIds);
-        return tagsNames.stream().sorted().collect(Collectors.joining(" "));
-    }
-
     private Page<QuestionDto> fromPage(Page<Question> page) {
-        Map<Integer, String> idsMap = questionTagService.mapIdsToNames();
         List<QuestionDto> collect = page.getContent().stream()
-                .map(i -> toDto(i, idsMap))
+                .map(this::toDto)
                 .collect(Collectors.toList());
         return Page.of(collect, page.getPageable(), page.getTotalSize());
     }
+
 }

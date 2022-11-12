@@ -33,5 +33,5 @@ public class QuestionDto {
 
     private boolean enabled;
 
-    private String tags;
+    private List<String> tags;
 }

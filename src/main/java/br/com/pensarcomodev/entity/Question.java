@@ -2,11 +2,16 @@ package br.com.pensarcomodev.entity;
 
 import br.com.pensarcomodev.entity.enums.QuestionType;
 import io.micronaut.data.annotation.*;
+import io.micronaut.data.jdbc.annotation.JoinColumn;
+import io.micronaut.data.jdbc.annotation.JoinTable;
 import io.micronaut.data.model.DataType;
 import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
+
+import static io.micronaut.data.annotation.Relation.Cascade.ALL;
 
 @Data
 @MappedEntity
@@ -49,7 +54,14 @@ public class Question {
     @MappedProperty(value = "enabled")
     private boolean enabled;
 
-    @MappedProperty(value = "metadata")
-    @TypeDef(type = DataType.JSON)
-    private QuestionMetadata metadata;
+//    @MappedProperty(value = "metadata")
+//    @TypeDef(type = DataType.JSON)
+//    private QuestionMetadata metadata;
+
+    @JoinTable(name = "question_tag_relation",
+        inverseJoinColumns = {@JoinColumn(name = "id_question_tag")},
+        joinColumns = {@JoinColumn(name = "id_question")}
+    )
+    @Relation(value = Relation.Kind.MANY_TO_MANY, cascade = ALL)
+    private Set<QuestionTag> tags;
 }
