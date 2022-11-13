@@ -21,7 +21,7 @@ public interface QuestionMapper {
     QuestionDto toDto(Question question);
 
 //    @Named("tagsMapping")
-    default List<String> map(Set<QuestionTag> tags) {
+    default List<String> map(List<QuestionTag> tags) {
         if (tags == null || tags.isEmpty()) {
             return Collections.emptyList();
         }

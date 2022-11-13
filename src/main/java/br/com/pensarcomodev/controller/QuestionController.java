@@ -17,7 +17,7 @@ public class QuestionController {
 
     @Get("/{id}")
     public QuestionDto findById(Long id) {
-        return questionService.findby(id);
+        return questionService.findDtoById(id);
     }
 
     @Get

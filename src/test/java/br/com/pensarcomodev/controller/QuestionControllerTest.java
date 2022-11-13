@@ -122,7 +122,6 @@ public class QuestionControllerTest extends AbstractControllerTest {
     @Order(6)
     public void testDisableQuestion_doesNotShowInPagination() {
 
-        questionRepository.deleteAll();
         QuestionDto response = post("/question", buildQuestion(), QuestionDto.class);
         QuestionDto question = get("/question/" + response.getId(), QuestionDto.class);
 
@@ -138,6 +137,21 @@ public class QuestionControllerTest extends AbstractControllerTest {
         // Não aparece quando busca por paginação
         Page<QuestionDto> pagedResponse = getWithPage("/question", 0, 10, QuestionDto.class);
         assertThat(pagedResponse.getContent()).isEmpty();
+    }
+
+    @Test
+    @Order(7)
+    public void testChangeQuestionTags() {
+        QuestionDto response = post("/question", buildQuestion(), QuestionDto.class);
+        savedId = response.getId();
+        QuestionDto question = get("/question/" + savedId, QuestionDto.class);
+
+        question.setTags(List.of("java", "medium"));
+        patch("/question", question, QuestionDto.class);
+
+        QuestionDto question2 = get("/question/" + savedId, QuestionDto.class);
+        assertThat(question2.getTags()).contains("java", "medium");
+        assertThat(question2.getTags()).doesNotContain("easy");
     }
 
     private QuestionDto buildQuestion() {

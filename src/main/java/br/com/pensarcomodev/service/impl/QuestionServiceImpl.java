@@ -12,7 +12,6 @@ import io.micronaut.data.model.Sort;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,32 +24,37 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionTagService questionTagService;
 
     @Override
-    public QuestionDto findby(Long id) {
+    public QuestionDto findDtoById(Long id) {
+        return toDto(findById(id));
+    }
+
+    @Override
+    public Question findById(Long id) {
         Question question = questionRepository.findById(id).orElseThrow();
-        question.setTags(questionRepository.findTagsByIdEqual(question.getId()));
-        return toDto(question);
+        question.setTags(questionTagService.findTagByQuestionId(question.getId()));
+        return question;
     }
 
     @Override
     public QuestionDto saveNew(QuestionDto questionDto) {
         Question question = fromDto(questionDto);
         question.setEnabled(true);
-        questionTagService.createNewTags(question.getTags());
         question = questionRepository.save(question);
+        questionTagService.setTags(question);
         return toDto(question);
     }
 
     @Override
     public QuestionDto update(QuestionDto questionDto) {
         Question question = fromDto(questionDto);
-        Question questionDb = questionRepository.findById(question.getId()).orElseThrow();
+        Question questionDb = findById(questionDto.getId());
         questionDb.setChoiceAnswers(question.getChoiceAnswers());
         questionDb.setCodeAnswer(question.getCodeAnswer());
         questionDb.setEnabled(question.isEnabled());
         questionDb.setText(question.getText());
         questionDb.setType(question.getType());
         questionDb.setTags(question.getTags());
-        questionTagService.createNewTags(question.getTags());
+        questionTagService.setTags(question);
         questionDb = questionRepository.update(questionDb);
         return toDto(questionDb);
     }
@@ -69,7 +73,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private Question fromDto(QuestionDto dto) {
         Question question = questionMapper.fromDto(dto);
-        question.setTags(new HashSet<>(questionTagService.fromNames(dto.getTags())));
+        question.setTags(questionTagService.fromNames(dto.getTags()));
         return question;
     }
 

@@ -1,5 +1,6 @@
 package br.com.pensarcomodev.repository;
 
+import br.com.pensarcomodev.entity.Question;
 import io.micronaut.context.BeanContext;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -23,9 +24,27 @@ public class QuestionRepositoryTest {
     }
 
     @Test
+    public void testFindTagByQuestionIdEquals() {
+        String query = beanContext.getBeanDefinition(QuestionTagRelationRepository.class)
+                .getRequiredMethod("findTagByQuestionIdEquals", Long.class)
+                .getAnnotationMetadata().stringValue(Query.class)
+                .orElse(null);
+        System.out.println(query);
+    }
+
+    @Test
+    public void testFindTagByQuestionIdEquals2() {
+        String query = beanContext.getBeanDefinition(QuestionTagRelationRepository.class)
+                .getRequiredMethod("findTagByQuestionEquals", Question.class)
+                .getAnnotationMetadata().stringValue(Query.class)
+                .orElse(null);
+        System.out.println(query);
+    }
+
+    @Test
     public void testFindTagsQuery() {
-        String query = beanContext.getBeanDefinition(QuestionRepository.class)
-                .getRequiredMethod("findTagsByIdEqual", Long.class)
+        String query = beanContext.getBeanDefinition(QuestionTagRelationRepository.class)
+                .getRequiredMethod("findTagByQuestionIdEquals", Long.class)
                 .getAnnotationMetadata().stringValue(Query.class)
                 .orElse(null);
         System.out.println(query);

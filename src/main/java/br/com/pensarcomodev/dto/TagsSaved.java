@@ -9,7 +9,17 @@ import java.util.List;
 @Data
 public class TagsSaved {
 
-    private List<QuestionTag> existingTags = new ArrayList<>();
+    private List<QuestionTag> existingTags;
 
-    private List<QuestionTag> newTags = new ArrayList<>();
+    private List<QuestionTag> newTags;
+
+    private List<QuestionTag> allTags = new ArrayList<>();
+
+    public TagsSaved(List<QuestionTag> newTags, List<QuestionTag> existingTags) {
+        this.existingTags = existingTags;
+        this.newTags = newTags;
+        allTags.addAll(newTags);
+        allTags.addAll(existingTags);
+    }
+
 }
