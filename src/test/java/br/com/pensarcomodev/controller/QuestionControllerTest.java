@@ -3,7 +3,6 @@ package br.com.pensarcomodev.controller;
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.ChoiceAnswer;
 import br.com.pensarcomodev.entity.CodeAnswer;
-import br.com.pensarcomodev.entity.Question;
 import br.com.pensarcomodev.entity.enums.QuestionType;
 import br.com.pensarcomodev.repository.QuestionRepository;
 import br.com.pensarcomodev.repository.QuestionTagRepository;
@@ -16,7 +15,6 @@ import java.time.Clock;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

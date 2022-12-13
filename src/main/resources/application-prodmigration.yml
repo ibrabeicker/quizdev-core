@@ -1,8 +1,8 @@
 datasources:
   default:
-    url: 'jdbc:postgresql://localhost:5432/db_quizdev_core?currentSchema=quizdev_core'
-    username: quizdev_core_app
-    password: quizdev_core_app
+    url: ${PROD_MIGRATION_DB_URL}
+    username: ${PROD_MIGRATION_DB_USERNAME}
+    password: ${PROD_MIGRATION_DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     db-type: postgres
     dialect: POSTGRES
@@ -11,5 +11,3 @@ flyway:
     default:
       default-schema: quizdev_core
       enabled: true
-      locations:
-        - classpath:migrations
