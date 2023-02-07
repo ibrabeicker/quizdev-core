@@ -1,0 +1,18 @@
+package br.com.pensarcomodev.sandbox;
+
+public enum EvalStatus {
+
+    VALID,
+    RECOVERABLE_DEFINED,
+    RECOVERABLE_NOT_DEFINED,
+    DROPPED,
+    OVERWRITTEN,
+    REJECTED,
+    NONEXISTENT,
+    EXCEPTION,
+    WRONG_RETURN_TYPE,
+    TIMEOUT,
+    MULTIPLE_STATEMENTS,
+    INVALID_IMPORT
+
+}

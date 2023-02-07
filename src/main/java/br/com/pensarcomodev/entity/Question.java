@@ -1,6 +1,7 @@
 package br.com.pensarcomodev.entity;
 
 import br.com.pensarcomodev.entity.enums.QuestionType;
+import br.com.pensarcomodev.entity.enums.SourceType;
 import io.micronaut.data.annotation.*;
 import io.micronaut.data.model.DataType;
 import lombok.*;
@@ -23,17 +24,20 @@ public class Question {
     @MappedProperty(value = "name")
     private String name;
 
-    @MappedProperty(value = "text")
-    private String text;
+    @MappedProperty(value = "source_code")
+    private String sourceCode;
+
+    @MappedProperty(value = "source_type")
+    private SourceType sourceType;
 
     @ToString.Exclude
     @MappedProperty(value = "type")
     private QuestionType type;
 
     @ToString.Exclude
-    @MappedProperty(value = "choice_answers")
+    @MappedProperty(value = "choices")
     @TypeDef(type = DataType.JSON)
-    private List<ChoiceAnswer> choiceAnswers;
+    private List<Choice> choices;
 
     @ToString.Exclude
     @MappedProperty(value = "code_answer")
@@ -49,15 +53,6 @@ public class Question {
     @MappedProperty(value = "enabled")
     private boolean enabled;
 
-//    @MappedProperty(value = "metadata")
-//    @TypeDef(type = DataType.JSON)
-//    private QuestionMetadata metadata;
-
-//    @JoinTable(name = "question_tag_relation",
-//        inverseJoinColumns = {@JoinColumn(name = "id_question_tag")},
-//        joinColumns = {@JoinColumn(name = "id_question")}
-//    )
-//    @Relation(value = Relation.Kind.MANY_TO_MANY, cascade = ALL)
     @Transient
     private List<QuestionTag> tags;
 }

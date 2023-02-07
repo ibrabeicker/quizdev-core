@@ -2,9 +2,10 @@ package br.com.pensarcomodev.service.impl;
 
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.Question;
+import br.com.pensarcomodev.entity.enums.SourceType;
 import br.com.pensarcomodev.mapper.QuestionMapper;
 import br.com.pensarcomodev.repository.QuestionRepository;
-import br.com.pensarcomodev.service.QuestionService;
+import br.com.pensarcomodev.service.QuestionManagementService;
 import br.com.pensarcomodev.service.QuestionTagService;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Singleton
 @RequiredArgsConstructor
-public class QuestionServiceImpl implements QuestionService {
+public class QuestionManagementServiceImpl implements QuestionManagementService {
 
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
@@ -48,10 +49,10 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDto update(QuestionDto questionDto) {
         Question question = fromDto(questionDto);
         Question questionDb = findById(questionDto.getId());
-        questionDb.setChoiceAnswers(question.getChoiceAnswers());
+        questionDb.setChoices(question.getChoices());
         questionDb.setCodeAnswer(question.getCodeAnswer());
         questionDb.setEnabled(question.isEnabled());
-        questionDb.setText(question.getText());
+        questionDb.setSourceCode(question.getSourceCode());
         questionDb.setType(question.getType());
         questionDb.setTags(question.getTags());
         questionTagService.setTags(question);

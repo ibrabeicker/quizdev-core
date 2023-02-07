@@ -1,9 +1,10 @@
 create table question (
     id_question bigserial primary key,
     name text not null,
-    text text not null,
+    source_code text not null,
+    source_type text not null,
     type text not null,
-    choice_answers jsonb,
+    choices jsonb,
     code_answer jsonb,
 --    metadata jsonb,
     enabled boolean default true,

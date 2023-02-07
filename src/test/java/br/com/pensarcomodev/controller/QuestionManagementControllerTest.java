@@ -1,9 +1,11 @@
 package br.com.pensarcomodev.controller;
 
 import br.com.pensarcomodev.dto.QuestionDto;
+import br.com.pensarcomodev.entity.Choice;
 import br.com.pensarcomodev.entity.ChoiceAnswer;
 import br.com.pensarcomodev.entity.CodeAnswer;
 import br.com.pensarcomodev.entity.enums.QuestionType;
+import br.com.pensarcomodev.entity.enums.SourceType;
 import br.com.pensarcomodev.repository.QuestionRepository;
 import br.com.pensarcomodev.repository.QuestionTagRepository;
 import io.micronaut.data.model.Page;
@@ -21,8 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest(transactional = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QuestionControllerTest extends AbstractControllerTest {
+public class QuestionManagementControllerTest extends AbstractControllerTest {
 
+    private static final String PATH = "/question-management";
+    private static final String PATH_PREFIX = PATH + "/";
+    
     private Long savedId;
 
     @Inject
@@ -41,13 +46,14 @@ public class QuestionControllerTest extends AbstractControllerTest {
     @Order(1)
     public void testSaveQuestion() {
         QuestionDto question = buildQuestion();
-        QuestionDto createdResponse = post("/question", question, QuestionDto.class);
+        QuestionDto createdResponse = post(PATH, question, QuestionDto.class);
         savedId = createdResponse.getId();
         assertNotNull(savedId);
 
-        QuestionDto getResponse = get("/question/" + savedId, QuestionDto.class);
+        QuestionDto getResponse = get(PATH_PREFIX + savedId, QuestionDto.class);
         assertNotNull(getResponse);
-        assertEquals(2, getResponse.getChoiceAnswers().size());
+        assertEquals(SourceType.MARKDOWN, getResponse.getSourceType());
+        assertEquals(2, getResponse.getChoices().size());
         assertThat(getResponse.getTags()).contains("java", "easy");
     }
 
@@ -57,11 +63,11 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
         persistQuestions(20);
 
-        Page<QuestionDto> response = getWithPage("/question", 0, 10, QuestionDto.class);
+        Page<QuestionDto> response = getWithPage(PATH, 0, 10, QuestionDto.class);
         assertEquals(10, response.getContent().size());
-        response = getWithPage("/question", 1, 10, QuestionDto.class);
+        response = getWithPage(PATH, 1, 10, QuestionDto.class);
         assertEquals(10, response.getContent().size());
-        response = getWithPage("/question", 2, 10, QuestionDto.class);
+        response = getWithPage(PATH, 2, 10, QuestionDto.class);
         assertEquals(0, response.getContent().size());
         assertEquals(20, response.getTotalSize());
     }
@@ -72,7 +78,7 @@ public class QuestionControllerTest extends AbstractControllerTest {
 
         persistQuestions(20);
 
-        Page<QuestionDto> response = getWithPage("/question", QuestionDto.class);
+        Page<QuestionDto> response = getWithPage(PATH, QuestionDto.class);
         assertEquals(10, response.getContent().size());
     }
 
@@ -81,9 +87,9 @@ public class QuestionControllerTest extends AbstractControllerTest {
     public void testCodeAnswerSave() {
 
         QuestionDto question = buildCodeQuestion();
-        QuestionDto response = post("/question", question, QuestionDto.class);
+        QuestionDto response = post(PATH, question, QuestionDto.class);
 
-        assertNull(response.getChoiceAnswers());
+        assertNull(response.getChoices());
         assertNotNull(response.getCodeAnswer());
         assertEquals(QuestionType.CODE, response.getType());
     }
@@ -92,62 +98,62 @@ public class QuestionControllerTest extends AbstractControllerTest {
     @Order(5)
     public void testUpdateQuestion() {
 
-        QuestionDto response = post("/question", buildQuestion(), QuestionDto.class);
-        QuestionDto question = get("/question/" + response.getId(), QuestionDto.class);
+        QuestionDto response = post(PATH, buildQuestion(), QuestionDto.class);
+        QuestionDto question = get(PATH_PREFIX + response.getId(), QuestionDto.class);
 
         // Quando atualiza as informações
         ZonedDateTime now = ZonedDateTime.now(Clock.systemUTC());
-        question.setText("Novo texto");
+        question.setSourceCode("Novo texto");
         question.setCreationDate(now);
         question.setName("Novo nome");
-        question.getChoiceAnswers().get(0).setText("Nova resposta 2");
-        patch("/question", question, QuestionDto.class);
+        question.getChoices().get(0).setSourceCode("Nova resposta 2");
+        patch(PATH, question, QuestionDto.class);
 
-        response = get("/question/" + response.getId(), QuestionDto.class);
+        response = get(PATH_PREFIX + response.getId(), QuestionDto.class);
 
         // As propriedades permanentes não devem ser sobrescritas
         assertNotEquals("Novo nome", response.getName());
         assertNotEquals(now, response.getCreationDate());
 
         // O resto das propriedades é sobrescrita
-        assertEquals("Novo texto", response.getText());
-        assertEquals("Nova resposta 2", response.getChoiceAnswers().get(0).getText());
-        assertEquals(2, response.getChoiceAnswers().size());
-        assertEquals("Alternative 2", response.getChoiceAnswers().get(1).getText());
+        assertEquals("Novo texto", response.getSourceCode());
+        assertEquals("Nova resposta 2", response.getChoices().get(0).getSourceCode());
+        assertEquals(2, response.getChoices().size());
+        assertEquals("Alternative 2", response.getChoices().get(1).getSourceCode());
     }
 
     @Test
     @Order(6)
     public void testDisableQuestion_doesNotShowInPagination() {
 
-        QuestionDto response = post("/question", buildQuestion(), QuestionDto.class);
-        QuestionDto question = get("/question/" + response.getId(), QuestionDto.class);
+        QuestionDto response = post(PATH, buildQuestion(), QuestionDto.class);
+        QuestionDto question = get(PATH_PREFIX + response.getId(), QuestionDto.class);
 
         // Quando desativar a pergunta
         question.setEnabled(false);
-        patch("/question", question, QuestionDto.class);
+        patch(PATH, question, QuestionDto.class);
 
         // Aparece quando busca por id
-        response = get("/question/" + response.getId(), QuestionDto.class);
+        response = get(PATH_PREFIX + response.getId(), QuestionDto.class);
         assertNotNull(response);
         assertFalse(response.isEnabled());
 
         // Não aparece quando busca por paginação
-        Page<QuestionDto> pagedResponse = getWithPage("/question", 0, 10, QuestionDto.class);
+        Page<QuestionDto> pagedResponse = getWithPage(PATH, 0, 10, QuestionDto.class);
         assertThat(pagedResponse.getContent()).isEmpty();
     }
 
     @Test
     @Order(7)
     public void testChangeQuestionTags() {
-        QuestionDto response = post("/question", buildQuestion(), QuestionDto.class);
+        QuestionDto response = post(PATH, buildQuestion(), QuestionDto.class);
         savedId = response.getId();
-        QuestionDto question = get("/question/" + savedId, QuestionDto.class);
+        QuestionDto question = get(PATH_PREFIX + savedId, QuestionDto.class);
 
         question.setTags(List.of("java", "medium"));
-        patch("/question", question, QuestionDto.class);
+        patch(PATH, question, QuestionDto.class);
 
-        QuestionDto question2 = get("/question/" + savedId, QuestionDto.class);
+        QuestionDto question2 = get(PATH_PREFIX + savedId, QuestionDto.class);
         assertThat(question2.getTags()).contains("java", "medium");
         assertThat(question2.getTags()).doesNotContain("easy");
     }
@@ -155,9 +161,10 @@ public class QuestionControllerTest extends AbstractControllerTest {
     private QuestionDto buildQuestion() {
         return QuestionDto.builder()
                 .name("pergunta 1")
-                .text("Pergunta 1?")
+                .sourceCode("Pergunta 1?")
+                .sourceType(SourceType.MARKDOWN)
                 .type(QuestionType.UNICO)
-                .choiceAnswers(buildAnswers())
+                .choices(buildAnswers())
                 .tags(List.of("java", "easy"))
                 .build();
     }
@@ -165,22 +172,24 @@ public class QuestionControllerTest extends AbstractControllerTest {
     private QuestionDto buildCodeQuestion() {
         return QuestionDto.builder()
                 .name("pergunta 2")
-                .text("Pergunta 2?")
+                .sourceCode("Pergunta 2?")
+                .sourceType(SourceType.MARKDOWN)
                 .type(QuestionType.CODE)
                 .tags(List.of("java", "easy"))
                 .codeAnswer(CodeAnswer.builder().code("foo bar").build())
                 .build();
     }
 
-    private List<ChoiceAnswer> buildAnswers() {
+    private List<Choice> buildAnswers() {
         return Arrays.asList(
-                ChoiceAnswer.builder()
+                Choice.builder()
                         .right(true)
-                        .text("Alternative 1")
+                        .sourceCode("Alternative 1")
+                        .sourceType(SourceType.MARKDOWN)
                         .build(),
-                ChoiceAnswer.builder()
+                Choice.builder()
                         .right(false)
-                        .text("Alternative 2")
+                        .sourceCode("Alternative 2")
                         .build()
         );
     }
@@ -190,11 +199,12 @@ public class QuestionControllerTest extends AbstractControllerTest {
             QuestionDto question = QuestionDto.builder()
                     .type(QuestionType.UNICO)
                     .name("pergunta_" + i)
-                    .text("Pergunta " + i)
-                    .choiceAnswers(buildAnswers())
+                    .sourceCode("Pergunta " + i)
+                    .sourceType(SourceType.MARKDOWN)
+                    .choices(buildAnswers())
                     .tags(List.of("java", "easy"))
                     .build();
-            post("/question", question, QuestionDto.class);
+            post(PATH, question, QuestionDto.class);
         }
     }
 }

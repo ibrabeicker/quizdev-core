@@ -1,9 +1,11 @@
 package br.com.pensarcomodev.dto;
 
+import br.com.pensarcomodev.entity.Choice;
 import br.com.pensarcomodev.entity.ChoiceAnswer;
 import br.com.pensarcomodev.entity.CodeAnswer;
 import br.com.pensarcomodev.entity.QuestionMetadata;
 import br.com.pensarcomodev.entity.enums.QuestionType;
+import br.com.pensarcomodev.entity.enums.SourceType;
 import io.micronaut.data.annotation.*;
 import io.micronaut.data.model.DataType;
 import lombok.*;
@@ -21,11 +23,13 @@ public class QuestionDto {
 
     private String name;
 
-    private String text;
+    private String sourceCode;
+
+    private SourceType sourceType;
 
     private QuestionType type;
 
-    private List<ChoiceAnswer> choiceAnswers;
+    private List<Choice> choices;
 
     private CodeAnswer codeAnswer;
 

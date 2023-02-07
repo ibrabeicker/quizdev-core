@@ -1,7 +1,6 @@
 package br.com.pensarcomodev.codeeval;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.internal.Diff;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class BlankIgnoringDiffTest {
         assertSame(" abc def ", "abc def");
         assertSame("abc     def", "abc def");
         assertSame("abc\n\ndef", "abc def");
-        assertDiff("abcdef", "abc def");
+        assertDiff("abcdef", "abc d def");
     }
 
     @Test

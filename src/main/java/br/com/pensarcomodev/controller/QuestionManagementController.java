@@ -1,7 +1,7 @@
 package br.com.pensarcomodev.controller;
 
 import br.com.pensarcomodev.dto.QuestionDto;
-import br.com.pensarcomodev.service.impl.QuestionServiceImpl;
+import br.com.pensarcomodev.service.impl.QuestionManagementServiceImpl;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.*;
@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Controller("/question")
+@Controller("/question-management")
 @RequiredArgsConstructor
-public class QuestionController {
+public class QuestionManagementController {
 
-    private final QuestionServiceImpl questionService;
+    private final QuestionManagementServiceImpl questionService;
 
     @Get("/{id}")
     public QuestionDto findById(Long id) {

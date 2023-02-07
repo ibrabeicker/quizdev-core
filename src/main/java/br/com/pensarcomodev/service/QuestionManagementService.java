@@ -5,7 +5,7 @@ import br.com.pensarcomodev.entity.Question;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 
-public interface QuestionService {
+public interface QuestionManagementService {
 
     QuestionDto findDtoById(Long id);
 
