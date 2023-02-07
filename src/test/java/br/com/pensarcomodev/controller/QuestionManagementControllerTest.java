@@ -2,7 +2,6 @@ package br.com.pensarcomodev.controller;
 
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.Choice;
-import br.com.pensarcomodev.entity.ChoiceAnswer;
 import br.com.pensarcomodev.entity.CodeAnswer;
 import br.com.pensarcomodev.entity.enums.QuestionType;
 import br.com.pensarcomodev.entity.enums.SourceType;
@@ -183,12 +182,12 @@ public class QuestionManagementControllerTest extends AbstractControllerTest {
     private List<Choice> buildAnswers() {
         return Arrays.asList(
                 Choice.builder()
-                        .right(true)
+                        .value(true)
                         .sourceCode("Alternative 1")
                         .sourceType(SourceType.MARKDOWN)
                         .build(),
                 Choice.builder()
-                        .right(false)
+                        .value(false)
                         .sourceCode("Alternative 2")
                         .build()
         );

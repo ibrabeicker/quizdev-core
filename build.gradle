@@ -36,6 +36,9 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
+    // HashIds
+    implementation("org.hashids:hashids:1.0.3")
+
     implementation("org.apache.commons:commons-text:1.10.0")
 
     // QuerySpecification

@@ -20,5 +20,5 @@ public class Choice {
 
     private SourceType sourceType;
 
-    private boolean right;
+    private boolean value;
 }
