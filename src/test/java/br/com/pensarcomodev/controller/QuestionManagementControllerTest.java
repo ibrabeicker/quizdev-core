@@ -53,6 +53,8 @@ public class QuestionManagementControllerTest extends AbstractControllerTest {
         assertNotNull(getResponse);
         assertEquals(SourceType.MARKDOWN, getResponse.getSourceType());
         assertEquals(2, getResponse.getChoices().size());
+        assertEquals(1, getResponse.getChoices().get(0).getId());
+        assertEquals(2, getResponse.getChoices().get(1).getId());
         assertThat(getResponse.getTags()).contains("java", "easy");
     }
 

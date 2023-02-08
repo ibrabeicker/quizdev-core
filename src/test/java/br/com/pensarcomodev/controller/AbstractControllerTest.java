@@ -1,18 +1,14 @@
 package br.com.pensarcomodev.controller;
 
-import br.com.pensarcomodev.entity.Question;
 import br.com.pensarcomodev.util.ParamMap;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.type.GenericArgument;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.MutableHttpParameters;
 import io.micronaut.http.MutableHttpRequest;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import jakarta.inject.Inject;
-
-import java.util.Map;
 
 public class AbstractControllerTest {
 

@@ -1,6 +1,7 @@
 package br.com.pensarcomodev.mapper;
 
 import br.com.pensarcomodev.dto.ChoiceQuestionDto;
+import br.com.pensarcomodev.dto.CourseQuestionViewDto;
 import br.com.pensarcomodev.entity.SubmittedAnswer;
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.Question;
@@ -24,6 +25,8 @@ public interface QuestionMapper {
     SubmittedAnswer.Choice fromSubmittedAnswer(ChoiceQuestionDto.Answer answer);
 
     List<SubmittedAnswer.Choice> fromSubmittedAnswers(List<ChoiceQuestionDto.Answer> answers);
+
+    CourseQuestionViewDto toViewDto(Question question);
 
 //    @Named("tagsMapping")
     default List<String> map(List<QuestionTag> tags) {

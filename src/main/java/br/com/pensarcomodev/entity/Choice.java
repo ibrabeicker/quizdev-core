@@ -1,6 +1,5 @@
 package br.com.pensarcomodev.entity;
 
-import br.com.pensarcomodev.entity.enums.SourceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +16,6 @@ public class Choice {
     private String sourceCode;
 
     private String explanationSourceCode;
-
-    private SourceType sourceType;
 
     private boolean value;
 }

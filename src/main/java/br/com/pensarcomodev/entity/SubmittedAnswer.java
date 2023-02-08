@@ -19,21 +19,23 @@ public class SubmittedAnswer {
     @Id
     @GeneratedValue(GeneratedValue.Type.AUTO)
     @MappedProperty(value = "id_submitted_answer")
-    public Long id;
+    private Long id;
 
     @Relation(Relation.Kind.MANY_TO_ONE)
     @MappedProperty(value = "id_question")
-    public Question question;
+    @ToString.Exclude
+    private Question question;
 
     @MappedProperty(value = "id_student")
-    public String studentId;
+    private String studentId;
 
     @MappedProperty(value = "full_score")
-    public boolean fullScore;
+    private boolean fullScore;
 
     @MappedProperty(value = "choices")
     @TypeDef(type = DataType.JSON)
-    public List<Choice> choices = new ArrayList<>();
+    @ToString.Exclude
+    private List<Choice> choices = new ArrayList<>();
 
     @DateCreated
     @MappedProperty(value = "creation_date")
@@ -49,6 +51,7 @@ public class SubmittedAnswer {
         private boolean right;
     }
 
+    @ToString.Include(name = "questionId")
     public Long questionId() {
         return question != null ? question.getId() : null;
     }

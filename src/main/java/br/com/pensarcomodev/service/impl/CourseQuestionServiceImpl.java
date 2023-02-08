@@ -1,6 +1,7 @@
 package br.com.pensarcomodev.service.impl;
 
 import br.com.pensarcomodev.dto.ChoiceQuestionDto;
+import br.com.pensarcomodev.dto.CourseQuestionViewDto;
 import br.com.pensarcomodev.entity.Choice;
 import br.com.pensarcomodev.entity.Question;
 import br.com.pensarcomodev.entity.SubmittedAnswer;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.security.Principal;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,9 +28,14 @@ public class CourseQuestionServiceImpl implements CourseQuestionService {
     private final QuestionMapper questionMapper;
     private final SubmittedAnswerRepository submittedAnswerRepository;
 
-//    @Override
+    @Override
+    public CourseQuestionViewDto getQuestionView(String id) {
+        Question question = questionRepository.findById(HashId.decodeHash(id)).orElseThrow();
+        return questionMapper.toViewDto(question);
+    }
+
+    @Override
     public ChoiceQuestionDto submitChoiceQuestion(ChoiceQuestionDto dto, Principal user) {
-        dto.setStudentId(user.getName());
         Long questionId = HashId.decodeHash(dto.getQuestionId());
         Question question = questionRepository.findById(questionId).orElseThrow();
         Map<Integer, Choice> choicesMap = question.getChoices().stream().collect(Collectors.toMap(Choice::getId, i -> i));
@@ -40,16 +47,19 @@ public class CourseQuestionServiceImpl implements CourseQuestionService {
             answer.setSourceType(choice.getSourceType());
             answer.setExplanationSource(choice.getExplanationSourceCode());
         }
+        SubmittedAnswer submittedAnswer = registerSubmittedQuestion(dto, question);
+        dto.setAnswerId(HashId.hash(submittedAnswer.getId()));
         return dto;
     }
 
-    private void registerSubmittedQuestion(ChoiceQuestionDto dto, Question question) {
+    private SubmittedAnswer registerSubmittedQuestion(ChoiceQuestionDto dto, Question question) {
         SubmittedAnswer submittedAnswer = new SubmittedAnswer();
         submittedAnswer.setQuestion(question);
         submittedAnswer.setStudentId(dto.getStudentId());
         submittedAnswer.setFullScore(dto.getAnswers().stream().allMatch(ChoiceQuestionDto.Answer::getRight));
         submittedAnswer.setChoices(questionMapper.fromSubmittedAnswers(dto.getAnswers()));
-        submittedAnswerRepository.save(submittedAnswer);
+        SubmittedAnswer saved = submittedAnswerRepository.save(submittedAnswer);
         log.info("{}", submittedAnswer);
+        return saved;
     }
 }

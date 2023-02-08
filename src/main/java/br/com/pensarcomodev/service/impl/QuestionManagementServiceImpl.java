@@ -1,8 +1,8 @@
 package br.com.pensarcomodev.service.impl;
 
 import br.com.pensarcomodev.dto.QuestionDto;
+import br.com.pensarcomodev.entity.Choice;
 import br.com.pensarcomodev.entity.Question;
-import br.com.pensarcomodev.entity.enums.SourceType;
 import br.com.pensarcomodev.mapper.QuestionMapper;
 import br.com.pensarcomodev.repository.QuestionRepository;
 import br.com.pensarcomodev.service.QuestionManagementService;
@@ -40,6 +40,7 @@ public class QuestionManagementServiceImpl implements QuestionManagementService 
     public QuestionDto saveNew(QuestionDto questionDto) {
         Question question = fromDto(questionDto);
         question.setEnabled(true);
+        setIds(question.getChoices());
         question = questionRepository.save(question);
         questionTagService.setTags(question);
         return toDto(question);
@@ -83,6 +84,12 @@ public class QuestionManagementServiceImpl implements QuestionManagementService 
                 .map(this::toDto)
                 .collect(Collectors.toList());
         return Page.of(collect, page.getPageable(), page.getTotalSize());
+    }
+
+    private void setIds(List<Choice> choices) {
+        for (int i = 0; i < choices.size(); i++) {
+            choices.get(i).setId(i + 1);
+        }
     }
 
 }

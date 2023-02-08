@@ -17,6 +17,8 @@ public class ChoiceQuestionDto {
 
     private List<Answer> answers = new ArrayList<>();
 
+    private String answerId;
+
     @Data
     @Introspected
     public static class Answer {
@@ -29,7 +31,6 @@ public class ChoiceQuestionDto {
 
         private String explanationSource;
 
-        private SourceType sourceType;
     }
 
 }
