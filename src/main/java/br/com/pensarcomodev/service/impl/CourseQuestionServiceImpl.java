@@ -44,7 +44,6 @@ public class CourseQuestionServiceImpl implements CourseQuestionService {
             Choice choice = choicesMap.get(answerId);
             boolean rightResponse = answer.getSelected().equals(choice.isValue());
             answer.setRight(rightResponse);
-            answer.setSourceType(choice.getSourceType());
             answer.setExplanationSource(choice.getExplanationSourceCode());
         }
         SubmittedAnswer submittedAnswer = registerSubmittedQuestion(dto, question);

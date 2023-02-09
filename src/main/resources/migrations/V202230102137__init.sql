@@ -29,7 +29,7 @@ create index question_tag_relation_idx01 on question_tag_relation(id_question_ta
 
 create table submitted_answer (
     id_submitted_answer bigserial primary key,
-    id_question bigint references question,
+    id_question bigint references question on delete cascade,
     id_student text not null,
     full_score boolean not null,
     choices jsonb,

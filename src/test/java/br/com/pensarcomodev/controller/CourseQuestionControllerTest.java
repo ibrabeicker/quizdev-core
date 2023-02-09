@@ -113,7 +113,6 @@ public class CourseQuestionControllerTest extends AbstractControllerTest {
         Choice choice = new Choice();
         choice.setId(id);
         choice.setSourceCode("question " + id);
-        choice.setSourceType(SourceType.MARKDOWN);
         choice.setValue(value);
         choice.setExplanationSourceCode("foo");
         return choice;

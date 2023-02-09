@@ -87,6 +87,9 @@ public class QuestionManagementServiceImpl implements QuestionManagementService 
     }
 
     private void setIds(List<Choice> choices) {
+        if (choices == null) {
+            return;
+        }
         for (int i = 0; i < choices.size(); i++) {
             choices.get(i).setId(i + 1);
         }

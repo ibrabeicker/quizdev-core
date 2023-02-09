@@ -186,7 +186,6 @@ public class QuestionManagementControllerTest extends AbstractControllerTest {
                 Choice.builder()
                         .value(true)
                         .sourceCode("Alternative 1")
-                        .sourceType(SourceType.MARKDOWN)
                         .build(),
                 Choice.builder()
                         .value(false)
