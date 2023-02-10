@@ -17,8 +17,21 @@ public class AnswerCodeExecutionResponseDto {
 
     private ExecutionStatus evalStatus;
 
-    private List<AnswerCodeExecutionDto.TestCase> testCases = new ArrayList<>();
+    private List<ProgrammingTestCaseResult> testCases = new ArrayList<>();
 
     private String errorMessage;
+
+    @Data
+    @Introspected
+    public static class ProgrammingTestCaseResult {
+
+        private ProgrammingTestCase testCase;
+
+        private boolean passed;
+    }
+
+    public boolean isFullScore() {
+        return testCases.stream().allMatch(i -> i.isPassed());
+    }
 
 }

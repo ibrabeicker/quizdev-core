@@ -5,7 +5,7 @@ create table question (
     source_type text not null,
     type text not null,
     choices jsonb,
-    code_answer jsonb,
+    programming_question jsonb,
 --    metadata jsonb,
     enabled boolean default true,
     creation_date timestamp with time zone,

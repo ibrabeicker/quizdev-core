@@ -51,7 +51,7 @@ public class QuestionManagementServiceImpl implements QuestionManagementService 
         Question question = fromDto(questionDto);
         Question questionDb = findById(questionDto.getId());
         questionDb.setChoices(question.getChoices());
-        questionDb.setCodeAnswer(question.getCodeAnswer());
+        questionDb.setProgrammingQuestion(question.getProgrammingQuestion());
         questionDb.setEnabled(question.isEnabled());
         questionDb.setSourceCode(question.getSourceCode());
         questionDb.setType(question.getType());

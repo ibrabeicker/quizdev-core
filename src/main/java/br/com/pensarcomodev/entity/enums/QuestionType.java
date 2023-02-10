@@ -1,5 +1,5 @@
 package br.com.pensarcomodev.entity.enums;
 
 public enum QuestionType {
-    UNICO, MULTI, CODE
+    UNICO, MULTI, SYNTAX, PROGRAMMING
 }

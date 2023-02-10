@@ -40,9 +40,9 @@ public class Question {
     private List<Choice> choices;
 
     @ToString.Exclude
-    @MappedProperty(value = "code_answer")
+    @MappedProperty(value = "programming_question")
     @TypeDef(type = DataType.JSON)
-    private CodeAnswer codeAnswer;
+    private ProgrammingQuestion programmingQuestion;
 
     @DateCreated
     @MappedProperty(value = "creation_date")

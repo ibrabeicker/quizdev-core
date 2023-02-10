@@ -1,7 +1,7 @@
 package br.com.pensarcomodev.dto;
 
 import br.com.pensarcomodev.entity.Choice;
-import br.com.pensarcomodev.entity.CodeAnswer;
+import br.com.pensarcomodev.entity.ProgrammingQuestion;
 import br.com.pensarcomodev.entity.enums.QuestionType;
 import br.com.pensarcomodev.entity.enums.SourceType;
 import io.micronaut.core.annotation.Introspected;
@@ -32,7 +32,7 @@ public class QuestionDto {
 
     private List<Choice> choices;
 
-    private CodeAnswer codeAnswer;
+    private ProgrammingQuestion programmingQuestion;
 
     private ZonedDateTime creationDate;
 

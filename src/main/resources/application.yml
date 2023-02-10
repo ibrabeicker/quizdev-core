@@ -4,6 +4,10 @@ micronaut:
   data:
     pageable:
       default-page-size: 10
+  http:
+    services:
+      java-sandbox:
+        url: 'http://localhost:3000'
 datasources:
   default:
     db-type: postgres

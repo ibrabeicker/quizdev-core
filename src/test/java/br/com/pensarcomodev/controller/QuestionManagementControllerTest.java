@@ -2,7 +2,7 @@ package br.com.pensarcomodev.controller;
 
 import br.com.pensarcomodev.dto.QuestionDto;
 import br.com.pensarcomodev.entity.Choice;
-import br.com.pensarcomodev.entity.CodeAnswer;
+import br.com.pensarcomodev.entity.ProgrammingQuestion;
 import br.com.pensarcomodev.entity.enums.QuestionType;
 import br.com.pensarcomodev.entity.enums.SourceType;
 import br.com.pensarcomodev.repository.QuestionRepository;
@@ -91,7 +91,7 @@ public class QuestionManagementControllerTest extends AbstractControllerTest {
         QuestionDto response = post(PATH, question, QuestionDto.class);
 
         assertNull(response.getChoices());
-        assertNotNull(response.getCodeAnswer());
+        assertNotNull(response.getProgrammingQuestion());
         assertEquals(QuestionType.CODE, response.getType());
     }
 
@@ -177,7 +177,7 @@ public class QuestionManagementControllerTest extends AbstractControllerTest {
                 .sourceType(SourceType.MARKDOWN)
                 .type(QuestionType.CODE)
                 .tags(List.of("java", "easy"))
-                .codeAnswer(CodeAnswer.builder().code("foo bar").build())
+                .programmingQuestion(ProgrammingQuestion.builder().code("foo bar").build())
                 .build();
     }
 
